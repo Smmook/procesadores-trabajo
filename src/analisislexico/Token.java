@@ -9,6 +9,11 @@ public class Token {
         this.valor = valor;
     }
 
+    public Token(String etiqueta) {
+        this.etiqueta = etiqueta;
+        this.valor = "";
+    }
+
     public String getEtiqueta() {
         return etiqueta;
     }
