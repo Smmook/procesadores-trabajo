@@ -1,0 +1,6 @@
+int main() {
+    int x = 5;
+    int y = 3;
+
+    float res = (x+y)/1.5;
+}

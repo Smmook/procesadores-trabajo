@@ -46,6 +46,33 @@ public class Lexico {
         }
     }
 
+    private void checkComment() {
+        if (caracter == '/' && checkNextChar() == '/') {
+            do {
+                nextChar();
+                if (esElFinal()) return;
+            } while (caracter != '\n');
+            lineas++;
+            nextCharSignificativo();
+            return;
+        }
+
+        if (caracter == '/' && checkNextChar() == '*') {
+            do {
+                nextChar();
+                if (caracter == '\n') {
+                    lineas++;
+                } else if (caracter == '\0') {
+                    throw new RuntimeException("Comentario sin cerrar");
+                }
+            } while (!(caracter == '*' && checkNextChar() == '/'));
+            nextChar();
+            nextChar();
+
+            nextCharSignificativo();
+        }
+    }
+
     private Token tokenNumero() {
         String numero = "";
 
@@ -106,6 +133,8 @@ public class Lexico {
 
     public Token getNextToken() {
         nextCharSignificativo();
+
+        checkComment();
 
         if (caracter == '\0') {
             return new Token("end_program");
