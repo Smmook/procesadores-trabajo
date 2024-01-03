@@ -36,7 +36,7 @@ public class TraductorPostfijo {
         if (this.token.getEtiqueta().equals("open_parenthesis")) {
             compara("open_parenthesis");
             expresion();
-            compara("close_parenthesis");
+            compara("closed_parenthesis");
         } else if (this.token.getEtiqueta().equals("int")) {
             pila.push(this.token.getValor());
             compara("int");
