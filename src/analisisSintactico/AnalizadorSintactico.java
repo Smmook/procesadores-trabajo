@@ -21,62 +21,7 @@ public class AnalizadorSintactico {
     }
 
     public void analisisSintactico() {
-        declaraciones();
-    }
-
-
-    public void declaraciones() {
-        if (this.componenteLexico.getEtiqueta().equals("int") || this.componenteLexico.getEtiqueta().equals("float")) {
-            declaracion();
-            declaraciones();
-        }
-    }
-
-    public void declaracion() {
-        if (this.componenteLexico.getEtiqueta().equals("int") || this.componenteLexico.getEtiqueta().equals("float")) {
-            tipo();
-            identificadores();
-            compara("semicolon");
-        }
-    }
-
-
-    public void tipo() {
-        if (this.componenteLexico.getEtiqueta().equals("int") || this.componenteLexico.getEtiqueta().equals("float")) {
-            this.tipo = this.componenteLexico.getEtiqueta();
-            this.componenteLexico = this.lexico.getNextToken();
-        } else {
-            System.out.println("Error en el tipo: " + this.componenteLexico.toString());
-        }
-    }
-
-
-    public void identificadores() {
-        if (this.componenteLexico.getEtiqueta().equals("id")) {
-            simbolos.put(this.componenteLexico.getValor(), this.tipo);
-            this.componenteLexico = this.lexico.getNextToken();
-            masIdentificadores();
-        } else {
-            System.out.println("Error en el ident: " + this.componenteLexico.toString());
-        }
-    }
-
-    public void masIdentificadores() {
-        if (this.componenteLexico.getEtiqueta().equals("comma")) {
-            compara("comma");
-            simbolos.put(this.componenteLexico.getValor(), this.tipo);
-            this.componenteLexico = this.lexico.getNextToken();
-            masIdentificadores();
-        }
-    }
-
-
-    public void compara(String token) {
-        if(this.componenteLexico.getEtiqueta().equals(token)) {
-            this.componenteLexico = this.lexico.getNextToken();
-        }else {
-            System.out.println("Expected: " + token);
-        }
+        programa();
     }
 
     public String tablaSimbolos() {
@@ -90,5 +35,72 @@ public class AnalizadorSintactico {
         }
 
         return simbolos;
+    }
+
+    public void programa() {
+        compara("void");
+        compara("main");
+        compara("open_bracket");
+        declaraciones();
+        compara("closed_bracket");
+    }
+
+    public void declaraciones() {
+        if (this.componenteLexico.getEtiqueta().equals("int") || this.componenteLexico.getEtiqueta().equals("float")) {
+            declaracion();
+            declaraciones();
+        }
+    }
+
+    public void declaracion() {
+        tipo();
+        identificadores();
+        compara("semicolon");
+    }
+
+
+    public void tipo() {
+        if(this.componenteLexico.getEtiqueta().equals("int")) {
+            this.tipo = "int";
+            compara("int");
+        }else if(this.componenteLexico.getEtiqueta().equals("float")){
+            this.tipo = "float";
+            compara("float");
+        }
+
+        if (this.componenteLexico.getEtiqueta().equals("open_square_bracket")) {
+            vector();
+        }
+    }
+
+    public void vector() {
+        compara("open_square_bracket");
+        this.tamano = Integer.parseInt(this.componenteLexico.getValor());
+        this.tipo = "array (" + this.tipo + ", " + this.tamano + ")";
+        this.componenteLexico = this.lexico.getNextToken();
+        compara("closed_square_bracket");
+    }
+
+
+    public void identificadores() {
+        simbolos.put(this.componenteLexico.getValor(), this.tipo);
+        this.componenteLexico = this.lexico.getNextToken();
+        masIdentificadores();
+    }
+
+    public void masIdentificadores() {
+        if (this.componenteLexico.getEtiqueta().equals("comma")) {
+            compara("comma");
+            identificadores();
+        }
+    }
+
+
+    public void compara(String token) {
+        if(this.componenteLexico.getEtiqueta().equals(token)) {
+            this.componenteLexico = this.lexico.getNextToken();
+        }else {
+            System.out.println("Expected: " + token);
+        }
     }
 }

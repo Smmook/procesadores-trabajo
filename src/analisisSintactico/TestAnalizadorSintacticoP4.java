@@ -3,11 +3,11 @@ package analisisSintactico;
 import analisislexico.Lexico;
 import analisislexico.Token;
 
-public class TestAnalizadorSintactico {
+public class TestAnalizadorSintacticoP4 {
     public static void main(String[] args) {
-        boolean mostrarComponentesLexicos = true; //poner a false y no se quieren mostrar los tokens <id, a> ...
+        boolean mostrarComponentesLexicos = false; //poner a false y no se quieren mostrar los tokens <id, a> ...
 
-        String expresion = "void main {int a, b, c, d; float x; int [10] v,w,y;}";
+        String expresion = "int a, b, c, d; float x, y, z;";
 
         Token etiquetaLexica;
         Lexico lexico = new Lexico(expresion);
@@ -23,7 +23,7 @@ public class TestAnalizadorSintactico {
             System.out.println("");
         }
 
-        AnalizadorSintactico compilador = new AnalizadorSintactico (new Lexico(expresion));
+        AnalizadorSintacticoP4 compilador = new AnalizadorSintacticoP4(new Lexico(expresion));
 
         System.out.println("CompilaciÃ³n de sentencia de declaraciones de variables");
         System.out.println(expresion + "\n");
